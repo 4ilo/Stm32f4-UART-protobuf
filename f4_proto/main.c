@@ -18,7 +18,7 @@ static void clock_setup(void)
 
 static void gpio_setup(void)
 {
-    // Setup GPIOD12 for led
+    // Setup GPIOD for leds
     gpio_mode_setup(GPIOD, GPIO_MODE_OUTPUT, GPIO_PUPD_NONE, GPIO12);
     gpio_mode_setup(GPIOD, GPIO_MODE_OUTPUT, GPIO_PUPD_NONE, GPIO13);
     gpio_mode_setup(GPIOD, GPIO_MODE_OUTPUT, GPIO_PUPD_NONE, GPIO14);
@@ -83,14 +83,12 @@ int main(void)
     int pins[4] = {GPIO15, GPIO14, GPIO13, GPIO12};
 
     while (1) {
-        //result = usart_recv_blocking(USART2);
-        //usart_send_blocking(USART2, result);
-
         // Read message and decode protobuf
         length = uart_read_message(buffer);
         pb_istream_t istream = pb_istream_from_buffer(buffer, length);
         pb_decode(&istream, LedStatus_fields, &led_request);
 
+        // Enable/disable leds as requested
         for (int i = 0; i < 4; i++) {
             switch(*request_leds[i]) {
                 case LedStatus_Led_ON:
@@ -115,10 +113,5 @@ int main(void)
         // Send length + data
         usart_send_blocking(USART2, stream.bytes_written);
         uart_transmit(buffer, stream.bytes_written);
-
-
-        //for (int i = 0; i < 3000000; i++) {
-        //    __asm__("NOP");
-        //}
     }
 }
