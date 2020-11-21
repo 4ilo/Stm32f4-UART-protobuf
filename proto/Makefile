@@ -6,4 +6,4 @@ leds.pb.c: leds.proto
 
 .PHONY: clean
 clean:
-	rm -f leds.pb.* leds_py2.py
+	rm -f leds.pb.* leds_pb2.py
