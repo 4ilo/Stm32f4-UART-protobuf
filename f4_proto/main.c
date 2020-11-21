@@ -6,6 +6,10 @@
 #include <pb_decode.h>
 #include "leds.pb.h"
 
+const int pins[4] = {GPIO15, GPIO14, GPIO13, GPIO12};
+
+void _error(void);
+
 static void clock_setup(void)
 {
     // Enable GPIO clock for LED & UART
@@ -44,21 +48,21 @@ static void usart_setup(void)
     usart_enable(USART2);
 }
 
-static void uart_transmit(uint8_t* data, int16_t len)
+static void uart_transmit(const uint8_t * data, int16_t len)
 {
     for (int16_t i = 0; i < len; i++) {
         usart_send_blocking(USART2, data[i]);
     }
 }
 
-static uint16_t uart_read_message(uint8_t* data)
+static uint16_t uart_read_message(uint8_t * const data)
 {
     uint16_t length;
 
     // Read the length of the message
     length = usart_recv_blocking(USART2);
 
-    for (int i = 0; i < length; i++) {
+    for (uint16_t i = 0; i < length; i++) {
         data[i] = usart_recv_blocking(USART2);
     }
 
@@ -71,25 +75,25 @@ int main(void)
     gpio_setup();
     usart_setup();
 
-    int number = 0;
     uint16_t length;
-
     uint8_t buffer[15];
+
     LedStatus led_status = {LedStatus_Led_OFF, LedStatus_Led_OFF, LedStatus_Led_OFF, LedStatus_Led_OFF};
     LedStatus led_request = {};
 
-    LedStatus_Led* request_leds[4] = {&led_request.LedBlue, &led_request.LedRed, &led_request.LedOrange, &led_request.LedGreen};
-    LedStatus_Led* status_leds[4] = {&led_status.LedBlue, &led_status.LedRed, &led_status.LedOrange, &led_status.LedGreen};
-    int pins[4] = {GPIO15, GPIO14, GPIO13, GPIO12};
+    LedStatus_Led * const request_leds[4] = {&led_request.LedBlue, &led_request.LedRed, &led_request.LedOrange, &led_request.LedGreen};
+    LedStatus_Led* const status_leds[4] = {&led_status.LedBlue, &led_status.LedRed, &led_status.LedOrange, &led_status.LedGreen};
 
     while (1) {
         // Read message and decode protobuf
         length = uart_read_message(buffer);
         pb_istream_t istream = pb_istream_from_buffer(buffer, length);
-        pb_decode(&istream, LedStatus_fields, &led_request);
+        if (!pb_decode(&istream, LedStatus_fields, &led_request)) {
+            _error();
+        }
 
         // Enable/disable leds as requested
-        for (int i = 0; i < 4; i++) {
+        for (uint8_t i = 0; i < 4; i++) {
             switch(*request_leds[i]) {
                 case LedStatus_Led_ON:
                     gpio_set(GPIOD, pins[i]);
@@ -108,10 +112,23 @@ int main(void)
 
         // Encode ledstatus protobuf and send response over uart
         pb_ostream_t stream = pb_ostream_from_buffer(buffer, sizeof(buffer));
-        pb_encode(&stream, LedStatus_fields, &led_status);
+        if (!pb_encode(&stream, LedStatus_fields, &led_status)) {
+            _error();
+        }
 
         // Send length + data
         usart_send_blocking(USART2, stream.bytes_written);
         uart_transmit(buffer, stream.bytes_written);
+    }
+}
+
+void _error(void)
+{
+    while (1) {
+        // Flash red led
+        gpio_toggle(GPIOD, GPIO14);
+        for (int i=0; i<1000000; i++) {
+            __asm__("nop");
+        }
     }
 }
