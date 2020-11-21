@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+message LedStatus {
+    enum Led {
+        NO_CHANGE = 0;
+        ON = 1;
+        OFF = 2;
+    }
+
+    Led LedBlue = 1;
+    Led LedRed = 2;
+    Led LedOrange = 3;
+    Led LedGreen = 4;
+}
