@@ -26,7 +26,7 @@ int main()
         std::cout << "Cmd: ";
         std::cin >> led;
 
-        if (led == 'Q') {
+        if (led == 'q') {
             break;
         }
 
@@ -80,6 +80,7 @@ int main()
         std::cout << led_status.DebugString() << std::endl;
     }
 
+    std::cout << "Stopping" << std::endl;
     close(serial_port);
     return 0;
 }

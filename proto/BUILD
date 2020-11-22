@@ -1,3 +1,5 @@
+load("@com_google_protobuf//:protobuf.bzl", "py_proto_library")
+
 proto_library(
     name = "leds_proto",
     srcs = [
@@ -9,6 +11,14 @@ cc_proto_library(
     name = "leds_cc_proto",
     deps = [
         ":leds_proto"
+    ],
+    visibility = ["//visibility:public"],
+)
+
+py_proto_library(
+    name = "leds_py_proto",
+    srcs = [
+        "leds.proto"
     ],
     visibility = ["//visibility:public"],
 )

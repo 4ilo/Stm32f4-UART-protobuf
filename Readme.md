@@ -13,8 +13,7 @@ bazel run //f4_proto:flash --config=arm_config
 
 ## Python client
 ```
-make -C proto
-./cli.py
+bazel run //python_client:client
 ```
 
 ## C++ client
