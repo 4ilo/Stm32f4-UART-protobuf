@@ -17,7 +17,7 @@ make -C proto
 ./cli.py
 ```
 
-## C+ client
+## C++ client
 ```
 bazel build //client:client
 ```
