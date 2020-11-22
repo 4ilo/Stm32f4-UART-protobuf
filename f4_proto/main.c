@@ -2,9 +2,9 @@
 #include <libopencm3/stm32/gpio.h>
 #include <libopencm3/stm32/usart.h>
 
-#include <pb_encode.h>
-#include <pb_decode.h>
-#include "leds.pb.h"
+#include "pb_encode.h"
+#include "pb_decode.h"
+#include "proto/leds.pb.h"
 
 const int pins[4] = {GPIO15, GPIO14, GPIO13, GPIO12};
 

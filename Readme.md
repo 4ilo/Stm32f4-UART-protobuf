@@ -7,8 +7,8 @@
 
 ## Stm32f4 server
 ```
-make
-make flash
+make -C libopencm3
+bazel run //f4_proto:flash --config=arm_config
 ```
 
 ## Python client

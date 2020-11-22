@@ -12,3 +12,13 @@ http_archive(
 load("@rules_proto//proto:repositories.bzl", "rules_proto_dependencies", "rules_proto_toolchains")
 rules_proto_dependencies()
 rules_proto_toolchains()
+
+http_archive(
+    name = "nanopb",
+    sha256 = "cc3beaff146ffa0111ff92e5feac5791e6a49c5307dde4d3aae68424a53b0d3b",
+    strip_prefix = "nanopb-0.4.3",
+    urls = [
+        "https://github.com/nanopb/nanopb/archive/0.4.3.tar.gz",
+    ],
+    build_file = "@//:nanopb.BUILD",
+)
