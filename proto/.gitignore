@@ -1,4 +1,0 @@
-*.pb.c
-*.pb.h
-*_pb2.py
-__pycache__/
