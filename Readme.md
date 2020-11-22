@@ -19,5 +19,5 @@ make -C proto
 
 ## C++ client
 ```
-bazel build //client:client
+bazel run //client:client
 ```
