@@ -20,3 +20,13 @@ http_archive(
     ],
     build_file = "@//:nanopb.BUILD",
 )
+
+http_archive(
+    name = "libopencm3",
+    sha256 = "0acbc805d2c1450591412a109290cec2b3fb7c302a57ade34f2247d632c405a3",
+    strip_prefix = "libopencm3-0.8.0",
+    urls = [
+        "https://github.com/libopencm3/libopencm3/archive/v0.8.0.tar.gz",
+    ],
+    build_file = "@//:libopencm3.BUILD",
+)

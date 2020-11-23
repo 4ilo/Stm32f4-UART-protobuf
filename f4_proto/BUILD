@@ -6,9 +6,9 @@ cc_binary(
         "main.c"
     ],
     deps = [
-        "//libopencm3:export",
-        "//libopencm3:libopencm3_stm32f4",
         "//proto:leds-proto",
+        "@libopencm3//:export",
+        "@libopencm3//:libopencm3_stm32f4",
         "@nanopb//:nanopb",
         "stm32f411vet6.ld",
     ],

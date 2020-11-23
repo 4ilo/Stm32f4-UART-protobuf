@@ -4,10 +4,10 @@
 - Libopencm3
 - Google protobuf
 - nanopb
+- Bazel
 
 ## Stm32f4 server
 ```
-make -C libopencm3
 bazel run //f4_proto:flash --config=arm_config
 ```
 
