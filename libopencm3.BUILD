@@ -1,15 +1,12 @@
 genrule(
     name = "build",
-    srcs = [
-        "Makefile",
-    ],
+    srcs = glob(["**/*"]),
     outs = [
         "lib/libopencm3_stm32f4.a",
     ],
-    local = True,
     cmd = "\
         ROOT=$$(dirname $(location Makefile)) && \
-        make -C $$ROOT lib/stm32/f4 && \
+        make -C $$ROOT lib/stm32/f4 -j9 && \
         cp $$ROOT/lib/libopencm3_stm32f4.a $(location lib/libopencm3_stm32f4.a) \
     ",
 )

@@ -36,8 +36,7 @@ genrule(
         "leds.pb.c",
         "leds.pb.h",
     ],
-    local = True,
-    cmd = "$(location @nanopb//:nanopb_generator) $< -D $(RULEDIR)/.."
+    cmd = "$(location @nanopb//:nanopb_generator) $< -D $$(dirname $(RULEDIR))"
 )
 
 cc_library(
